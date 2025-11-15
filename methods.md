@@ -21,6 +21,28 @@ The complete list of tools and their versions is as follows:
 - fastp v0.26.0  
 - seqkit v2.8.2
 
+- soapdenovo2 2.40                             
+ABySS version 2.3.6
+ MEGAHIT v1.2.9
+
+
+
+# ✅  Statement (Normal Dataset Only)**
+
+The raw paired-end Illumina NovaSeq 6000 reads for the *Chelonia mydas* normal sample (CH-NORMS1) were obtained from Macrogen Singapore using the TruSeq Nano DNA library preparation kit (151 bp, paired-end). Quality assessment using FastQC (v0.11.9) and MultiQC (v1.15) showed no poor-quality reads, uniform base quality across read positions, and a GC content of approximately 44%. These results confirm that the sequencing data are of high quality and suitable for downstream genome mapping and variant detection analyses.
+
+---
+
+# ✅ **Sequencing Data Summary (Normal Sample Only)**
+
+| Dataset            | File            | Encoding     | Total Sequences | Total Bases | Read length | %GC | Poor-quality reads |
+| ------------------ | --------------- | ------------ | --------------: | ----------: | ----------: | --: | -----------------: |
+| Normal (CH-NORMS1) | W1-A_1.fastq.gz | Illumina 1.9 |     456,923,725 |    68.9 Gbp |      151 bp |  44 |                  0 |
+| Normal (CH-NORMS1) | W1-A_2.fastq.gz | Illumina 1.9 |     456,923,725 |    68.9 Gbp |      151 bp |  45 |                  0 |
+
+
+
+
 ## QC
 fastqc --threads 16 W1-A_1.fastq.gz W1-A_2.fastq.gz -o CH-NORMS1/FastqcReport
 fastqc --threads 16 S1_1.fastq.gz S1_2.fastq.gz -o Ab-NormS2/FastqcReport
@@ -36,17 +58,6 @@ Tool Versions and Sources:
 1. fastp v0.26.0 — OpenGene GitHub
    Fast, all-in-one trimmer with automatic adapter detection, base correction, and per-sample JSON/HTML QC reports (released August 2024).
 
-2. Trimmomatic v0.39 — Trimmomatic GitHub
-   Standard Java-based trimmer using sliding-window and adapter clipping; stable release since 2019.
-
-3. BBDuk (BBMap suite) v39.01 — BBMap SourceForge
-   Adapter and quality trimming based on k-mer matching; included in BBTools v39.01 (February 2024).
-
-4. Trim Galore! v0.6.8 — Babraham Bioinformatics
-   Wrapper around Cutadapt; performs quality trimming and adapter removal (December 2023).
-
-5. Cutadapt v5.2 — Bioconda / GitHub
-   Python-based adapter trimmer supporting multithreading (released 2025; Python 3.12 compatible).
 ------------------------------------------------------------
 
 Workflow and Rationale
@@ -60,9 +71,178 @@ Quality improvements were confirmed using FastQC (v0.11.9) and summarized with M
 
 
 
+               Trimmed Sequencing Data Summary (Normal CH-NORMS1)
+
+               | Dataset            | File            | Encoding     | Total Sequences | Poor-quality reads | Read length | %GC |
+| ------------------ | --------------- | ------------ | --------------: | -----------------: | ----------: | --: |
+| Normal (CH-NORMS1) | W1-A_1.fastq.gz | Illumina 1.9 |     456,923,725 |                  0 |      151 bp |  44 |
+| Normal (CH-NORMS1) | W1-A_2.fastq.gz | Illumina 1.9 |     456,923,725 |                  0 |      151 bp |  45 |
 
 
-## Alignment (examples)
+
+
+
+
+==============================================================================ABySS version 2.3.6     (abyss_env)
+cd /home/work/Desktop/variants/denovo_try/Abyss/Normal/ && \
+abyss-pe k=96 name=W1-A lib=pe \
+pe="/home/work/Desktop/variants/DataofDNA/CH-NORMS1/W1-A_1.fastq.gz /home/work/Desktop/variants/DataofDNA/CH-NORMS1/W1-A_2.fastq.gz" \
+j=10 B=600G
+
+
+===================================================- soapdenovo2 2.40                             
+
+
+soapdenovo2 2.40                                     (soapdenovo2_env)
+
+Normal
+
+step 1
+
+=================
+soap_config.txt
+
+
+
+max_rd_len=151
+
+[LIB]
+avg_ins=350
+reverse_seq=0
+asm_flags=3
+rank=1
+q1=/home/work/Desktop/variants/DataofDNA/CH-NORMS1/W1-A_1.fastq
+q2=/home/work/Desktop/variants/DataofDNA/CH-NORMS1/W1-A_2.fastq
+
+
+=====================
+
+
+
+
+cd /home/work/Desktop/variants/denovo_try/soapdenovo2/
+
+SOAPdenovo-63mer all \
+  -s soap_config.txt \
+  -K 63 \
+  -o W1-A-soap \
+  -p 30 \
+  -a 450
+
+
+
+============================================================================
+
+(soapdenovo2_env) work@work-Precision-7920-Tower:~/Desktop/variants/denovo_try/soapdenovo2$ SOAPdenovo-63mer all   -s soap_config.txt   -K 63   -o W1-A-soap   -p 30   -a 450
+
+============================================================================ MEGAHIT v1.2.9
+megahit \
+  -1 /media/beeu/DATA/fahad/TrimData/CH-NORMS1_trim/W1-A_1_trimmed.fastq.gz \
+  -2 /media/beeu/DATA/fahad/TrimData/CH-NORMS1_trim/W1-A_2_trimmed.fastq.gz \
+  -o /media/beeu/DATA/fahad/Denovo/Megahit_Normal \
+  --min-count 2 \
+  --k-min 21 \
+  --k-max 141 \
+  --k-step 12 \
+  -t 40
+
+  ==============================================================================
+
+
+
+  =================================================================Busco Results ==================
+| Sample (output folder)                           |       C% |   S% |  D% |   F% |   M% |    n |
+| ------------------------------------------------ | -------: | ---: | --: | ---: | ---: | ---: |
+| Reference\_ncbi\_Reference\_busco\_results       | **99.6** | 98.9 | 0.7 |  0.1 |  0.3 | 7480 |
+| abyss\_normal\_W1-A-scaffolds\_busco\_results    | **67.6** | 66.6 | 1.0 | 21.8 | 10.6 | 7480 |
+| **polca\_W1-A-scaffolds\_busco\_results**        | **67.6** | 66.6 | 1.0 | 21.8 | 10.6 | 7480 |
+| soapdenovo\_normal\_W1-A-soap\_busco\_results    |     59.1 | 58.7 | 0.4 | 25.2 | 15.7 | 7480 |
+| magahit\_normal\_final.contigs\_busco\_results   |     56.5 | 56.0 | 0.5 | 28.2 | 15.4 | 7480 |
+
+========================Busco restuls with ANI====
+| Assembly Tool / Run      | BUSCO C% |   F% |   M% |   ANI (%) | Align Fraction (Ref) | Align Fraction (Query) | Interpretation                      |
+| ------------------------ | -------: | ---: | ---: | --------: | -------------------: | ---------------------: | ----------------------------------- |
+| **Reference\_ncbi**      |     99.6 |  0.1 |  0.3 |    100.00 |              100.00% |                100.00% | 🏆 Perfect reference                |
+| **ABySS (Normal)**       |     67.6 | 21.8 | 10.6 | **99.45** |           **89.48%** |             **84.86%** | ✅ Best similarity overall           |
+| **ABySS + Polca polish** |     67.6 | 21.8 | 10.6 | \~99.45\* |           \~89.48%\* |             \~84.86%\* | ➖ No BUSCO change (likely same ANI) |
+| MEGAHIT (Normal)         |     56.5 | 28.2 | 15.4 |     99.40 |               87.91% |                 85.36% | 🟢 Very good                        |
+| SOAPdenovo2 (Normal)     |     59.1 | 25.2 | 15.7 |     99.03 |               78.14% |                 72.21% | 🔴 Lowest similarity                |
+
+
+
+======================================Quest Version: 5.3.0 report of megahit ,soapdenov and abyss========
+
+All statistics are based on contigs of size >= 500 bp, unless otherwise noted (e.g., "# contigs (>= 0 bp)" and "Total length (>= 0 bp)" include all contigs).
+
+Assembly                    MEGAHIT Assembly  SOAPdenovo2 Assembly  ABySS Assembly
+# contigs (>= 0 bp)         2016526           4302510               2118419       
+# contigs (>= 1000 bp)      188829            178561                128235        
+# contigs (>= 5000 bp)      108682            95240                 90825         
+# contigs (>= 10000 bp)     67450             60102                 62645         
+# contigs (>= 25000 bp)     19178             19989                 24430         
+# contigs (>= 50000 bp)     3057              4334                  6212          
+Total length (>= 0 bp)      2556992461        2558046622            2412364772    
+Total length (>= 1000 bp)   2001525914        1919780233            1999634395    
+Total length (>= 5000 bp)   1802063399        1721813040            1889199532    
+Total length (>= 10000 bp)  1502934610        1468244755            1683849457    
+Total length (>= 25000 bp)  739349188         832894057             1068318912    
+Total length (>= 50000 bp)  198556342         299482189             440085929     
+# contigs                   297228            254624                201612        
+Largest contig              165262            250385                299793        
+Total length                2072540175        1972334240            2048669361    
+GC (%)                      43.86             43.53                 43.70         
+N50                         18275             20633                 26214         
+N90                         3816              3886                  6191          
+auN                         23300.9           27698.7               33849.9       
+L50                         33113             26743                 22712         
+L90                         123096            107293                82698         
+# N's per 100 kbp           0.00              4415.14               324.62        
+========================================================================================
+
+----------------------------------------------------files--------------------------------------------
+
+| Assembler   | File to Use                         | Use Case                            |
+| ----------- | ----------------------------------- | ----------------------------------- |
+| MEGAHIT     | `final.contigs.fa`                  | ✅ All evaluations                   |
+| SOAPdenovo2 | `W1-A-soap.scafSeq`                 | ✅ All evaluations                   |
+| ABySS       | `W1-A-scaffolds.fa` (or `.contigs`) | ✅ All evaluations (prefer scaffold) |
+
+=========================================ANI results --------------------------------------------
+| Assembly Tool   | ANI (%)   | Align Fraction (Ref) | Align Fraction (Query) | Interpretation            |
+| --------------- | --------- | -------------------- | ---------------------- | ------------------------- |
+| **ABySS**       | **99.45** | **89.48%**           | **84.86%**             | ✅ Best similarity overall |
+| **MEGAHIT**     | 99.40     | 87.91%               | 85.36%                 | 🟢 Very good              |
+| **SOAPdenovo2** | 99.03     | 78.14%               | 72.21%                 | 🔴 Lowest similarity      |
+
+
+
+
+==========================================truth set 
+
+ minimap2 -ax asm5 Reference/Reference.fasta Abyss/Normal/W1-A-contigs.fa > minimap2.sam
+
+samtools sort -@ 8 -o /home/work/Desktop/variants/denovo_try/minmap/minimap2_sorted.bam /home/work/Desktop/variants/denovo_try/minmap/minimap2.sam
+
+# Step 1: Generate BCF using bcftools mpileup
+bcftools mpileup -f Reference/Reference.fasta /home/work/Desktop/variants/denovo_try/minmap/minimap2_sorted.bam \
+  -Ou | bcftools call -mv -Oz -o /home/work/Desktop/variants/denovo_try/minmap/variants_minimap2.vcf.gz
+
+# Step 2: Index the VCF (recommended)
+bcftools index /home/work/Desktop/variants/denovo_try/minmap/variants_minimap2.vcf.gz
+
+
+
+
+
+========================== mummer4-4.0.0rc1  ===================
+
+nucmer --prefix=/home/work/Desktop/variants/denovo_try/mumer4/abyss_vs_ref \
+  /home/work/Desktop/variants/denovo_try/Reference/Reference.fasta \
+  /home/work/Desktop/variants/denovo_try/Abyss/Normal/W1-A-contigs.fa
+
+
+
+## Alignment 
 
 Alignment
 ------------------------------------------------------------
@@ -345,6 +525,38 @@ Venn diagrams were generated to compare the overlap of SNP calls among the five 
 command 
 https://github.com/Wasiq54/Chelonia-mydas-variant-benchmark/blob/main/venn_analysis/venn_plot_abnormal.R
 https://github.com/Wasiq54/Chelonia-mydas-variant-benchmark/blob/main/venn_analysis/venn_plot_abnormal.R
+
+
+
+
+                                  Evalution using RTG
+
+     commands 
+     /script/RTG.txt
+
+
+
+
+     (A) Unfiltered performance (Threshold = None)
+
+These rows correspond to “use all variants as they are in the VCF” (no score cutoff).
+| Tool        | TP (baseline) | TP (call) | FP        | FN        | Precision  | Sensitivity | F1         |
+| ----------- | ------------- | --------- | --------- | --------- | ---------- | ----------- | ---------- |
+| VarScan     | 5,088,509     | 5,088,505 | 7,140,482 | 3,079,542 | 0.4161     | 0.6230      | 0.4989     |
+| GATK        | 5,068,348     | 5,068,342 | 7,561,404 | 3,099,703 | 0.4013     | 0.6205      | 0.4874     |
+| FreeBayes   | 4,465,838     | 4,456,957 | 6,589,960 | 3,702,213 | 0.4035     | 0.5467      | 0.4643     |
+| BCFtools    | 5,125,613     | 5,125,609 | 7,552,600 | 3,042,438 | 0.4043     | 0.6275      | 0.4918     |
+| DeepVariant | 5,081,165     | 5,081,160 | 6,975,659 | 3,086,886 | **0.4214** | 0.6221      | **0.5025** |
+
+
+(B) Best-score point (vcfeval “Threshold” row)
+| Tool        | Threshold | TP (baseline) | TP (call) | FP        | FN        | Precision  | Sensitivity | F1         |
+| ----------- | --------- | ------------- | --------- | --------- | --------- | ---------- | ----------- | ---------- |
+| VarScan     | None      | 5,088,509     | 5,088,505 | 7,140,482 | 3,079,542 | 0.4161     | 0.6230      | 0.4989     |
+| GATK        | 1402.060  | 4,169,967     | 4,169,967 | 545,323   | 3,998,084 | 0.8844     | 0.5105      | 0.6473     |
+| FreeBayes   | 1026.160  | 3,758,225     | 3,750,978 | 448,749   | 4,409,826 | 0.8931     | 0.4601      | 0.6073     |
+| BCFtools    | 222.417   | 4,403,711     | 4,403,711 | 268,293   | 3,764,340 | **0.9426** | **0.5391**  | **0.6859** |
+| DeepVariant | 39.100    | 3,672,379     | 3,672,379 | 497,597   | 4,495,672 | 0.8807     | 0.4496      | 0.5953     |
 
 
 
