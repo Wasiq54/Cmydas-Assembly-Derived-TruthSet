@@ -21,6 +21,9 @@ The complete list of tools and their versions is as follows:
 - fastp v0.26.0  
 - seqkit v2.8.2
 
+
+
+
 - soapdenovo2 2.40                             
 ABySS version 2.3.6
  MEGAHIT v1.2.9
