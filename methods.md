@@ -274,6 +274,26 @@ Mate Mapped to Diff. Chr (MAPQ >= 5) (%) 0.43%           1.06%           0.58%
 
 
 
+gatk MarkDuplicates \
+  -I "/media/work/New Volume1/Alignment/FastpAllignment/CH-NORMS1_trimmed_sorted_rg.bam" \
+  -O "/home/work/Desktop/variants/latest_tools_varains_with_reference_file/dedup_allignments/CH-NORMS1.dedup.bam" \
+  -M "/home/work/Desktop/variants/latest_tools_varains_with_reference_file/dedup_allignments/CH-NORMS1.metrics.txt" \
+  --CREATE_INDEX true
+
+  GATK MarkDuplicates Results Summary
+====================================
+
+Sample: CH-NORMS1)
+--------------------------
+READ_PAIRS_EXAMINED: 436,970,646
+READ_PAIR_DUPLICATES: 37,780,610
+READ_PAIR_OPTICAL_DUPLICATES: 3,774,873 (~10% of duplicate pairs)
+PERCENT_DUPLICATION: 8.67%
+ESTIMATED_LIBRARY_SIZE: 2,612,848,101
+
+Interpretation:
+- Duplication rate is low (under 10%), which is good for downstream variant calling.
+- Library complexity is high (large estimated library size).
 
 
 
