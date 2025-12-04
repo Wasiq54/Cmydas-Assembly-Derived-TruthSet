@@ -5,7 +5,7 @@
 # Platform: Illumina NovaSeq 151 bp paired-end reads
 # Threads: 15–40 depending on aligner
 # Author: Fahad Aslam
-################################################################################
+##################################################################################
 
 
 step one is rCheMyd1.pri.v2 (GCA_015237465.2) convert into fasta name is  Reference.fasta 
