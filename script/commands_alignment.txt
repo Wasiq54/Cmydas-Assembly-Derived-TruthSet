@@ -19,7 +19,6 @@ step one is rCheMyd1.pri.v2 (GCA_015237465.2) convert into fasta name is  Refere
 * **Reference prefix:** `/media/beeu/DATA/fahad/Reference/Reference`
 * **Alignment output base:** `/media/beeu/DATA/fahad/paper/Alignment`
 
-
 ```bash
 ############################################
 # MAKE ALIGNMENT OUTPUT DIRECTORIES
@@ -29,6 +28,8 @@ mkdir -p \
   /media/beeu/DATA/fahad/paper/Alignment/MINIMAP2 \
   /media/beeu/DATA/fahad/paper/Alignment/BWA
 ```
+
+
 
 ```bash
 ############################################
