@@ -1,70 +1,104 @@
 ################################################################################
 # STEP 3: READ ALIGNMENT (CH-NORMS1 DATASETS)
 # Species: Chelonia mydas (Green sea turtle)
-# Reference Genome: rCheMyd1.pri.v2 (GCA_015237465.2) convert into fasta name is  (Reference.fasta / Reference.mmi / Reference index)
+# Reference Genome: rCheMyd1.pri.v2 (GCA_015237465.2) convert into fasta name is  (Reference.fasta / Reference index)
 # Platform: Illumina NovaSeq 151 bp paired-end reads
 # Threads: 15–40 depending on aligner
 # Author: Fahad Aslam
 ################################################################################
 
-BASE="/media/beeu/DATA/fahad"
-REF="$BASE/Reference/Reference"
-TRIM="$BASE/TrimData"
-ALIGN="$BASE/paper/Alignment"
-THREADS=40
 
-################################################################################
-# TOOL 1: BOWTIE2 ALIGNMENT
-################################################################################
+step one is rCheMyd1.pri.v2 (GCA_015237465.2) convert into fasta name is  Reference.fasta 
 
 
-# Normal Dataset
+* **Trimmed inputs (fastp):**
+
+
+  `/media/fahad/7022BF6F46E38F25/trimming/fastp/CH-NORMS1_trim/W1-A_1_trimmed.fastq.gz`
+  `/media/fahad/7022BF6F46E38F25/trimming/fastp/CH-NORMS1_trim/W1-A_2_trimmed.fastq.gz`
+* **Reference prefix:** `/media/beeu/DATA/fahad/Reference/Reference`
+* **Alignment output base:** `/media/beeu/DATA/fahad/paper/Alignment`
+
+
+```bash
+############################################
+# MAKE ALIGNMENT OUTPUT DIRECTORIES
+############################################
+mkdir -p \
+  /media/beeu/DATA/fahad/paper/Alignment/BOWTIE2 \
+  /media/beeu/DATA/fahad/paper/Alignment/MINIMAP2 \
+  /media/beeu/DATA/fahad/paper/Alignment/BWA
+```
+
+```bash
+############################################
+# TOOL 1: BOWTIE2 ALIGNMENT (CH-NORMS1, fastp trimmed)
+############################################
 /usr/bin/time -v bowtie2 \
-  -x "$REF" \
-  -1 "$TRIM/CH-NORMS1_trim/W1-A_1_trimmed.fastq.gz" \
-  -2 "$TRIM/CH-NORMS1_trim/W1-A_2_trimmed.fastq.gz" \
+  -x /media/beeu/DATA/fahad/Reference/Reference \
+  -1 /media/fahad/7022BF6F46E38F25/trimming/fastp/CH-NORMS1_trim/W1-A_1_trimmed.fastq.gz \
+  -2 /media/fahad/7022BF6F46E38F25/trimming/fastp/CH-NORMS1_trim/W1-A_2_trimmed.fastq.gz \
   --very-sensitive-local -p 16 | \
 samtools view -@ 16 -bS - | \
-samtools sort -@ 16 -o "$ALIGN/BOWTIE2/CH-NORMS1_bowtie2_sorted.bam"
+samtools sort -@ 16 -o /media/beeu/DATA/fahad/paper/Alignment/BOWTIE2/CH-NORMS1_bowtie2_sorted.bam
+```
 
-# Index BAM files (both datasets)
-/usr/bin/time -v samtools index "$ALIGN/BOWTIE2/CH-NORMS1_bowtie2_sorted.bam"
+```bash
+# Index BOWTIE2 BAM
+/usr/bin/time -v samtools index \
+  /media/beeu/DATA/fahad/paper/Alignment/BOWTIE2/CH-NORMS1_bowtie2_sorted.bam
+```
 
-################################################################################
-# TOOL 2: MINIMAP2 ALIGNMENT
-################################################################################
-
-
-# Normal Dataset
-/usr/bin/time -v minimap2 -t 40 -ax sr "$REF.mmi" \
-  "$TRIM/CH-NORMS1_trim/W1-A_1_trimmed.fastq.gz" \
-  "$TRIM/CH-NORMS1_trim/W1-A_2_trimmed.fastq.gz" \
+```bash
+############################################
+# TOOL 2: MINIMAP2 ALIGNMENT (CH-NORMS1, fastp trimmed)
+############################################
+/usr/bin/time -v minimap2 -t 40 -ax sr \
+  /media/beeu/DATA/fahad/Reference/Reference.mmi \
+  /media/fahad/7022BF6F46E38F25/trimming/fastp/CH-NORMS1_trim/W1-A_1_trimmed.fastq.gz \
+  /media/fahad/7022BF6F46E38F25/trimming/fastp/CH-NORMS1_trim/W1-A_2_trimmed.fastq.gz \
   | samtools view -bS - | \
-samtools sort -@ 40 -o "$ALIGN/MINIMAP2/CH-NORMS1_minimap2_sorted.bam"
+samtools sort -@ 40 -o /media/beeu/DATA/fahad/paper/Alignment/MINIMAP2/CH-NORMS1_minimap2_sorted.bam
+```
 
-# Index BAM files
-/usr/bin/time -v samtools index "$ALIGN/MINIMAP2/CH-NORMS1_minimap2_sorted.bam"
+```bash
+# Index MINIMAP2 BAM
+/usr/bin/time -v samtools index \
+  /media/beeu/DATA/fahad/paper/Alignment/MINIMAP2/CH-NORMS1_minimap2_sorted.bam
+```
 
-################################################################################
-# TOOL 3: BWA-MEM ALIGNMENT
-################################################################################
-
-# Normal Dataset
-/usr/bin/time -v bwa mem -t 15 "$REF.fasta" \
-  "$TRIM/CH-NORMS1_trim/W1-A_1_trimmed.fastq.gz" \
-  "$TRIM/CH-NORMS1_trim/W1-A_2_trimmed.fastq.gz" \
+```bash
+############################################
+# TOOL 3: BWA-MEM ALIGNMENT (CH-NORMS1, fastp trimmed)
+############################################
+/usr/bin/time -v bwa mem -t 15 \
+  /media/beeu/DATA/fahad/Reference/Reference.fasta \
+  /media/fahad/7022BF6F46E38F25/trimming/fastp/CH-NORMS1_trim/W1-A_1_trimmed.fastq.gz \
+  /media/fahad/7022BF6F46E38F25/trimming/fastp/CH-NORMS1_trim/W1-A_2_trimmed.fastq.gz \
   | samtools view -bS - | \
-samtools sort -@ 15 -o "$ALIGN/BWA/CH-NORMS1_bwa_sorted.bam"
+samtools sort -@ 15 -o /media/beeu/DATA/fahad/paper/Alignment/BWA/CH-NORMS1_bwa_sorted.bam
+```
 
+```bash
+# Index BWA BAM
+/usr/bin/time -v samtools index \
+  /media/beeu/DATA/fahad/paper/Alignment/BWA/CH-NORMS1_bwa_sorted.bam
+```
 
-# Index BAM files
-/usr/bin/time -v samtools index "$ALIGN/BWA/CH-NORMS1_bwa_sorted.bam"
+```bash
+############################################
+# POST-ALIGNMENT CHECKS (FLAGSTAT)
+############################################
+samtools flagstat \
+  /media/beeu/DATA/fahad/paper/Alignment/BWA/CH-NORMS1_bwa_sorted.bam \
+  > /media/beeu/DATA/fahad/paper/Alignment/BWA/CH-NORMS1_flagstat.txt
 
-################################################################################
-# POST-ALIGNMENT CHECKS
-################################################################################
-# Collect alignment statistics
-samtools flagstat "$ALIGN/BWA/CH-NORMS1_bwa_sorted.bam" > "$ALIGN/BWA/CH-NORMS1_flagstat.txt"
-samtools flagstat "$ALIGN/BOWTIE2/CH-NORMS1_bowtie2_sorted.bam" > "$ALIGN/BOWTIE2/CH-NORMS1_flagstat.txt"
-samtools flagstat "$ALIGN/MINIMAP2/CH-NORMS1_minimap2_sorted.bam" > "$ALIGN/MINIMAP2/CH-NORMS1_flagstat.txt"
-################################################################################
+samtools flagstat \
+  /media/beeu/DATA/fahad/paper/Alignment/BOWTIE2/CH-NORMS1_bowtie2_sorted.bam \
+  > /media/beeu/DATA/fahad/paper/Alignment/BOWTIE2/CH-NORMS1_flagstat.txt
+
+samtools flagstat \
+  /media/beeu/DATA/fahad/paper/Alignment/MINIMAP2/CH-NORMS1_minimap2_sorted.bam \
+  > /media/beeu/DATA/fahad/paper/Alignment/MINIMAP2/CH-NORMS1_flagstat.txt
+```
+
