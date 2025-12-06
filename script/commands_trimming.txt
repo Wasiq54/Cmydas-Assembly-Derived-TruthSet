@@ -16,10 +16,11 @@ Use in Research paper
   -I W1-A_2.fastq.gz \
   -o W1-A_1_trimmed.fastq.gz \
   -O W1-A_2_trimmed.fastq.gz \
-  --thread 70 \
+  --thread 16 \
   --html fastp_report.html \
   --json fastp_report.json \
-  2> fastp_runtime_70threads.txt
+  2> fastp_runtime.txt
+
 
 
 
