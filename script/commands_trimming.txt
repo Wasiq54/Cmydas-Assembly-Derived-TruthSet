@@ -1,0 +1,27 @@
+################################################################################
+# STEP 2: READ TRIMMING 
+# Dataset: Chelonia mydas (Normal: CH-NORMS1)
+# Platform: Illumina NovaSeq 6000 | Paired-end 151 bp reads
+# Threads: 20 | Author: Fahad Aslam
+################################################################################
+
+
+Use in Research paper
+---
+
+# 1) fastp  (CH-NORMS1)
+############################################
+/usr/bin/time -v fastp \
+  -i W1-A_1.fastq.gz \
+  -I W1-A_2.fastq.gz \
+  -o W1-A_1_trimmed.fastq.gz \
+  -O W1-A_2_trimmed.fastq.gz \
+  --thread 70 \
+  --html fastp_report.html \
+  --json fastp_report.json \
+  2> fastp_runtime_70threads.txt
+
+
+
+
+
