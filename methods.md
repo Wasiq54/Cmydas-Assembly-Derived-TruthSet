@@ -58,14 +58,14 @@ multiqc "/media/work/New Volume1/DataofDNA/" -o "/media/work/New Volume1/DataofD
 
 Tool Versions and Sources:
 ------------------------------------------------------------
-1. fastp v0.26.0 — OpenGene GitHub
-   Fast, all-in-one trimmer with automatic adapter detection, base correction, and per-sample JSON/HTML QC reports (released August 2024).
+1. fastp v0.23.4 — OpenGene GitHub
+  
 
 ------------------------------------------------------------
 
 Workflow and Rationale
 All five trimmers were applied to both the normal (CH-NORMS1) and abnormal (Ab-NormS2) datasets to compare performance in adapter removal, read retention, and GC content preservation.
-Among them, fastp (v0.26.0) demonstrated the best overall balance of speed, accuracy, and comprehensive reporting. Therefore, fastp-trimmed reads were selected for all downstream analyses, including alignment, variant calling, and benchmarking.
+Among them, fastp (v0.23.4) demonstrated the best overall balance of speed, accuracy, and comprehensive reporting. Therefore, fastp-trimmed reads were selected for all downstream analyses, including alignment, variant calling, and benchmarking.
 
 The exact shell commands and parameters for each tool are provided in:
 scripts/commands_trimming_all_tools.txt
