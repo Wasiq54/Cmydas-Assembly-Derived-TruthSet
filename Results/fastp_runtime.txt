@@ -1,0 +1,64 @@
+Read1 before filtering:
+total reads: 456923725
+total bases: 68995482475
+Q20 bases: 67340568045(97.6014%)
+Q30 bases: 64649502678(93.7011%)
+
+Read2 before filtering:
+total reads: 456923725
+total bases: 68995482475
+Q20 bases: 64838927489(93.9756%)
+Q30 bases: 60120541951(87.1369%)
+
+Read1 after filtering:
+total reads: 438509696
+total bases: 66065595811
+Q20 bases: 64800602822(98.0852%)
+Q30 bases: 62330054630(94.3457%)
+
+Read2 after filtering:
+total reads: 438509696
+total bases: 66048642079
+Q20 bases: 63359481463(95.9285%)
+Q30 bases: 59033272717(89.3785%)
+
+Filtering result:
+reads passed filter: 877019392
+reads failed due to low quality: 32902646
+reads failed due to too many N: 20536
+reads failed due to too short: 3904876
+reads with adapter trimmed: 3607906
+bases trimmed due to adapters: 209002392
+
+Duplication rate: 8.88178%
+
+Insert size peak (evaluated by paired-end reads): 0
+
+JSON report: fastp_report.json
+HTML report: fastp_report.html
+
+fastp -i W1-A_1.fastq.gz -I W1-A_2.fastq.gz -o W1-A_1_trimmed.fastq.gz -O W1-A_2_trimmed.fastq.gz --thread 16 --html fastp_report.html --json fastp_report.json 
+fastp v0.23.4, time used: 1740 seconds
+	Command being timed: "fastp -i W1-A_1.fastq.gz -I W1-A_2.fastq.gz -o W1-A_1_trimmed.fastq.gz -O W1-A_2_trimmed.fastq.gz --thread 16 --html fastp_report.html --json fastp_report.json"
+	User time (seconds): 14698.51
+	System time (seconds): 1054.55
+	Percent of CPU this job got: 905%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 28:59.98
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 3206248
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 10963305
+	Voluntary context switches: 112789212
+	Involuntary context switches: 29976
+	Swaps: 0
+	File system inputs: 8989216
+	File system outputs: 127968512
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
