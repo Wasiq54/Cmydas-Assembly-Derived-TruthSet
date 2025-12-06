@@ -48,8 +48,9 @@ The raw paired-end Illumina NovaSeq 6000 reads for the *Chelonia mydas* normal s
 
 ## QC
 fastqc --threads 16 W1-A_1.fastq.gz W1-A_2.fastq.gz -o CH-NORMS1/FastqcReport
-fastqc --threads 16 S1_1.fastq.gz S1_2.fastq.gz -o Ab-NormS2/FastqcReport
 multiqc "/media/work/New Volume1/DataofDNA/" -o "/media/work/New Volume1/DataofDNA/summary/"
+
+
 
 
 
@@ -58,16 +59,27 @@ multiqc "/media/work/New Volume1/DataofDNA/" -o "/media/work/New Volume1/DataofD
 
 Tool Versions and Sources:
 ------------------------------------------------------------
-1. fastp v0.23.4 — OpenGene GitHub
-  
+
+fastp v0.23.4 — OpenGene GitHub
+command 
+ /usr/bin/time -v fastp \
+  -i W1-A_1.fastq.gz \
+  -I W1-A_2.fastq.gz \
+  -o W1-A_1_trimmed.fastq.gz \
+  -O W1-A_2_trimmed.fastq.gz \
+  --thread 16 \
+  --html fastp_report.html \
+  --json fastp_report.json \
+  2> fastp_runtime.txt
+
 
 ------------------------------------------------------------
 
 Workflow and Rationale
-All five trimmers were applied to both the normal (CH-NORMS1) and abnormal (Ab-NormS2) datasets to compare performance in adapter removal, read retention, and GC content preservation.
-Among them, fastp (v0.23.4) demonstrated the best overall balance of speed, accuracy, and comprehensive reporting. Therefore, fastp-trimmed reads were selected for all downstream analyses, including alignment, variant calling, and benchmarking.
+ fastp (v0.23.4) demonstrated the best overall balance of speed, accuracy, and comprehensive reporting. Therefore, fastp-trimmed reads were selected for all downstream analyses, including alignment, variant calling, and benchmarking.
 
 The exact shell commands and parameters for each tool are provided in:
+
 scripts/commands_trimming_all_tools.txt
 
 Quality improvements were confirmed using FastQC (v0.11.9) and summarized with MultiQC (v1.15) after trimming.
