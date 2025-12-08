@@ -134,7 +134,79 @@ megahit \
   --k-step 12 \
   -t 40
 
-  ==============================================================================
+  ==============================================================================busco
+
+busco \
+-i /home/work/Desktop/variants/denovo_try/Abyss/Normal/W1-A-scaffolds.fa \
+-o W1A_busco_results \
+-m genome \
+-l sauropsida_odb10 \
+-c 16 \
+--out_path /home/work/Desktop/variants/BUSCO/
+
+
+
+# ================================
+# BUSCO COMMAND — SOAPdenovo NORMAL
+# ================================
+/home/work/miniconda3/envs/basco_env/bin/busco \
+  -i /home/work/Desktop/variants/denovo_try/all_assembly_files/soapdenovo_normal/W1-A-soap.scafSeq \
+  -o soapdenovo_normal_W1-A-soap_busco_results \
+  -m genome \
+  -l sauropsida_odb10 \
+  -c 16 \
+  --out_path /home/work/Desktop/variants/denovo_try/all_assembly_files \
+  --download_path /home/work/busco_downloads \
+  --offline
+
+
+# ================================
+# BUSCO COMMAND — ABySS NORMAL
+# ================================
+/home/work/miniconda3/envs/basco_env/bin/busco \
+  -i /home/work/Desktop/variants/denovo_try/all_assembly_files/abyss_normal/W1-A-scaffolds.fa \
+  -o abyss_normal_W1-A-scaffolds_busco_results \
+  -m genome \
+  -l sauropsida_odb10 \
+  -c 16 \
+  --out_path /home/work/Desktop/variants/denovo_try/all_assembly_files \
+  --download_path /home/work/busco_downloads \
+  --offline
+
+
+# ================================
+# BUSCO COMMAND — REFERENCE NCBI (rCheMyd1.pri.v2)
+# ================================
+/home/work/miniconda3/envs/basco_env/bin/busco \
+  -i /home/work/Desktop/variants/denovo_try/all_assembly_files/Reference_ncbi/Reference.fasta \
+  -o Reference_ncbi_Reference_busco_results \
+  -m genome \
+  -l sauropsida_odb10 \
+  -c 16 \
+  --out_path /home/work/Desktop/variants/denovo_try/all_assembly_files \
+  --download_path /home/work/busco_downloads \
+  --offline
+# BUSCO COMMAND — magahit_normal_final
+/home/work/miniconda3/envs/basco_env/bin/busco \
+  -i /home/work/Desktop/variants/denovo_try/all_assembly_files/magahit_normal/final.contigs.fa \
+  -o magahit_normal_final.contigs_busco_results \
+  -m genome \
+  -l sauropsida_odb10 \
+  -c 16 \
+  --out_path /home/work/Desktop/variants/denovo_try/all_assembly_files \
+  --download_path /home/work/busco_downloads \
+  --offline
+
+
+
+
+
+
+
+
+
+
+
 
 
 
