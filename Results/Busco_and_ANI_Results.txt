@@ -1,0 +1,21 @@
+
+
+
+
+  =================================================================Busco Results ==================
+| Sample (output folder)                           |       C% |   S% |  D% |   F% |   M% |    n |
+| ------------------------------------------------ | -------: | ---: | --: | ---: | ---: | ---: |
+| Reference\_ncbi\_Reference\_busco\_results       | **99.6** | 98.9 | 0.7 |  0.1 |  0.3 | 7480 |
+| abyss\_normal\_W1-A-scaffolds\_busco\_results    | **67.6** | 66.6 | 1.0 | 21.8 | 10.6 | 7480 |
+| **polca\_W1-A-scaffolds\_busco\_results**        | **67.6** | 66.6 | 1.0 | 21.8 | 10.6 | 7480 |
+| soapdenovo\_normal\_W1-A-soap\_busco\_results    |     59.1 | 58.7 | 0.4 | 25.2 | 15.7 | 7480 |
+| magahit\_normal\_final.contigs\_busco\_results   |     56.5 | 56.0 | 0.5 | 28.2 | 15.4 | 7480 |
+
+========================Busco restuls with ANI====
+| Assembly Tool / Run      | BUSCO C% |   F% |   M% |   ANI (%) | Align Fraction (Ref) | Align Fraction (Query) | Interpretation                      |
+| ------------------------ | -------: | ---: | ---: | --------: | -------------------: | ---------------------: | ----------------------------------- |
+| **Reference\_ncbi**      |     99.6 |  0.1 |  0.3 |    100.00 |              100.00% |                100.00% | 🏆 Perfect reference                |
+| **ABySS (Normal)**       |     67.6 | 21.8 | 10.6 | **99.45** |           **89.48%** |             **84.86%** | ✅ Best similarity overall           |
+| **ABySS + Polca polish** |     67.6 | 21.8 | 10.6 | \~99.45\* |           \~89.48%\* |             \~84.86%\* | ➖ No BUSCO change (likely same ANI) |
+| MEGAHIT (Normal)         |     56.5 | 28.2 | 15.4 |     99.40 |               87.91% |                 85.36% | 🟢 Very good                        |
+| SOAPdenovo2 (Normal)     |     59.1 | 25.2 | 15.7 |     99.03 |               78.14% |                 72.21% | 🔴 Lowest similarity                |
