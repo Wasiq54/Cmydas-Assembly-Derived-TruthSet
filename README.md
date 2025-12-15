@@ -1,108 +1,112 @@
+# Evaluating DeepVariant and Conventional SNP Callers in the *Chelonia mydas* Genome Using an Assembly-Derived Truth Set
 
-### Evaluating DeepVariant and Conventional SNP Callers in the Chelonia mydas Genome Using an Assembly-Derived Truth Set 
+## 📌 Project Overview
 
----
+This repository accompanies the research study **“Evaluating DeepVariant and Conventional SNP Callers in the *Chelonia mydas* Genome Using an Assembly-Derived Truth Set.”**
+The project presents a fully reproducible benchmarking framework for single-nucleotide polymorphism (SNP) detection in a non-model marine vertebrate using short-read whole-genome sequencing data.
 
-##  Overview
-
-##  This repository contains all scripts and workflow files used to reproduce the analyses presented in the manuscript:
-“Evaluating DeepVariant and Conventional SNP Callers in the Chelonia mydas Genome Using an Assembly-Derived Truth Set .”
-
-The study evaluates the performance of five short-variant callers on *Chelonia mydas* whole-genome sequencing data using a polished, assembly-derived SNP truth set. All pipelines for assembly generation, polishing, alignment, variant calling, filtering, and benchmarking are included.
+The workflow integrates read preprocessing, de novo genome assembly, assembly quality evaluation, reference-based alignment, variant calling using five tools, assembly-derived truth-set construction and benchmarking with RTG vcfeval.
 
 ---
 
+## 🧬 Study Objectives
+
+* Construct an **assembly-derived SNP truth set** for *Chelonia mydas*
+* Benchmark **DeepVariant** against conventional SNP callers (GATK, FreeBayes, VarScan, BCFtools)
+* Quantify performance using **precision, recall, F1-score**, and threshold optimization
+* Provide a **reproducible pipeline** for variant benchmarking in non-model organisms
+
+---
+
+## 📂 Repository Structure
 
 ```
+Cmydas-Assembly-Derived-TruthSet/
+├── README.md                     # Project overview (this file)
+├── METHODS.md                    # Detailed methods and reproducible workflow
+├── scripts/                      # All shell scripts and command files
+├── Results/                      # QUAST, BUSCO, ANI, variant calling & benchmarking outputs
+```
 
+---
 
-## 🧬 Pipeline Summary (Methods Used in the Paper)
+## 🔁 Reproducible Workflow Summary
 
-### 1. Read Preprocessing
+1. **Quality Control** – FastQC, MultiQC
+2. **Read Trimming** – fastp
+3. **De novo Assembly** – ABySS, MEGAHIT, SOAPdenovo2
+4. **Assembly Evaluation** – QUAST, BUSCO, ANI (skani)
+5. **Reference Alignment** – BWA-MEM, Bowtie2, Minimap2
+6. **Variant Calling** – DeepVariant, GATK, FreeBayes, VarScan, BCFtools
+7. **Variant Filtering** – AD, VAF, PASS criteria
+8. **Truth Set Generation** – Assembly-to-reference alignment
+9. **Benchmarking** – RTG vcfeval (precision, recall, F1-score)
 
-* fastp filtering, trimming, and quality correction
-* FastQC + MultiQC summary
+👉 **Full methodological details, exact commands, and parameters are provided in [`METHODS.md`](METHODS.md).**
 
-### 2. Genome Assembly
+---
 
-* ABySS v2.3.6
-* Best assembly selected using BUSCO (sauropsida_odb10), QUAST, and ANI
+## 📊 Key Findings (Summary)
 
-### 3. Assembly Polishing
-
-* POLCA (MaSuRCA v4.1.4) using original Illumina reads
-* Polished contigs used to derive the truth set
-
-### 4. Reference-Based Alignment
-
-* BWA-MEM v0.7.17 (primary aligner)
-* Bowtie2 v2.5.2 (comparison)
-* minimap2 v2.28 (comparison)
-* BWA-MEM selected for variant calling based on mapping metrics
-
-### 5. Variant Calling
-
-Five short-variant callers evaluated:
-
-* DeepVariant v1.9.0
-* GATK HaplotypeCaller v4.6.2.0
-* FreeBayes v1.3.10
-* VarScan v2.4.6
-* BCFtools v1.22
-
-### 6. Unified Variant Filtering
-
-Criteria used:
-
-* FILTER = PASS or “.”
-* Alternate allele depth (AD) > 3
-* Variant allele frequency (VAF) > 0.02
-* SNPs extracted using bcftools
-
-### 7. Assembly-Derived Truth Set Construction
-
-* Polished ABySS assembly aligned to reference with minimap2 (asm5)
-* Variants called with BCFtools mpileup + call
-* High-confidence SNPs used as the truth set
-
-### 8. Benchmarking
-
-* RTG Tools vcfeval used to compute
-
-  * True positives (TP)
-  * False positives (FP)
-  * False negatives (FN)
-  * Precision
-  * Recall
-  * F1-score
-* Evaluations performed in:
-
-  * Unfiltered mode (threshold = none)
-  * RTG-optimised QUAL threshold mode
-
-> 📌 No Venn diagrams, Jaccard similarity, or overlap analyses were included in this manuscript.
+* **ABySS** produced the most contiguous and biologically representative short-read assembly
+* **DeepVariant** achieved the highest F1-score without threshold tuning
+* **BCFtools** showed the strongest precision at optimized thresholds
+* High SNP concordance was observed among DeepVariant, GATK, BCFtools, and VarScan
+* Assembly-derived truth sets enable robust benchmarking in species lacking validated variant resources
 
 ---
 
 ## 📥 Data Availability
 
-Scripts and pipelines for all analyses are publicly available at:
+* **Raw sequencing data (Illumina NovaSeq, CH-NORMS1):**
+  European Nucleotide Archive (ENA): **PRJEB104518**
+  [https://www.ebi.ac.uk/ena/browser/view/PRJEB104518](https://www.ebi.ac.uk/ena/browser/view/PRJEB104518)
 
-🔗 [https://github.com/FahadAslam988/Cmydas-Assembly-Derived-TruthSet/](https://github.com/FahadAslam988/Cmydas-Assembly-Derived-TruthSet/)
+* **Reference genome:**
+  *Chelonia mydas* rCheMyd1.pri.v2 (GCA_015237465.2), NCBI RefSeq (VGP)
 
-Raw FASTQ files, ABySS assemblies, POLCA-corrected assemblies, and BAM alignment files are available upon reasonable request.
-
----
-
-## 👤 Author
-
-Fahad Aslam 
-GitHub: [https://github.com/FahadAslam988](https://github.com/FahadAslam988)
+* **Processed data and outputs:**
+  Zenodo archive (assemblies, truth set, filtered VCFs):
+  **DOI: 10.5281/zenodo.17741557**
 
 ---
 
-## 📄 License
+## 🛠 Software and Environments
 
-Licensed under the MIT License.
+All analyses were performed using Conda and/or Docker environments to ensure reproducibility.
+A complete list of tools and versions is available in **[`METHODS.md`](METHODS.md)**.
 
+---
+
+## 📖 How to Use This Repository
+
+1. Review the complete workflow in **[`METHODS.md`](METHODS.md)**
+2. Execute scripts in the order described under `scripts/`
+3. Compare your outputs with those provided in `Results/`
+4. Reuse or adapt the pipeline for other non-model organisms
+
+---
+
+## 📌 Citation
+
+If you use this pipeline, data, or scripts, please cite:
+
+> Aslam, F. *et al.* (2025). **Evaluating DeepVariant and Conventional SNP Callers in the *Chelonia mydas* Genome Using an Assembly-Derived Truth Set.** *(Manuscript in preparation / under review).*
+
+Zenodo DOI: **10.5281/zenodo.17741557**
+
+---
+
+## 📬 Contact
+
+For questions, reproducibility issues, or collaboration inquiries:
+
+**Fahad Aslam**
+PhD Candidate, Computer Science
+Institute of Oceanography and Environment (INOS)
+Universiti Malaysia Terengganu
+
+---
+
+⭐ *If this repository helps your research, please consider starring it on GitHub.*
 
