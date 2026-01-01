@@ -104,10 +104,10 @@ Zenodo DOI: **10.5281/zenodo.17741557**
 
 For questions, reproducibility issues, or collaboration inquiries:
 
-**Fahad Aslam**
-PhD Candidate, Computer Science
-Institute of Oceanography and Environment (INOS)
-Universiti Malaysia Terengganu
+**Wasiq Aslam**
++92300-9887762
+Wasiqaslam54@gmail.com
+
 
 ---
 
